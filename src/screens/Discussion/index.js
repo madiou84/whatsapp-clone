@@ -77,7 +77,9 @@ export default function Discussion ({ navigation }) {
         ) : (
           users.map(user => (
             <Item
+              isTime
               user={user}
+              isDiscussion
               key={user.id}
               onPress={ () => onPress(user) }
               onLongPress={ () => onLongPress(user) }

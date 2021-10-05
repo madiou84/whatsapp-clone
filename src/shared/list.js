@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
-import { Colors } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import { TouchableOpacity, Image, Text, View, ScrollView } from 'react-native';
+import { Text, Colors } from 'react-native-paper';
+import IconI from 'react-native-vector-icons/Ionicons';
+import IconS from 'react-native-vector-icons/SimpleLineIcons';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+import { TouchableOpacity, Image, View, ScrollView } from 'react-native';
 
 export const List = memo(({ children, styleScrollView, styleContainer, ...rest }) => {
     return (
@@ -25,7 +27,20 @@ export const Item = memo(props => {
     return <ItemElement {...props} />
 })
 
-export const ItemElement = memo(({ index, user, selected, renderFirstItem, hasAlreadyBeenSeen, isRecentUpdate, isUpdateView, ...rest }) => (
+export const ItemElement = memo(({
+    user,
+    index,
+    isTime,
+    selected,
+    isStatus,
+    isOurStatus,
+    isDiscussion,
+    isUpdateView,
+    isRecentUpdate,
+    renderFirstItem,
+    hasAlreadyBeenSeen,
+    ...rest
+}) => (
     <>
         <TouchableOpacity
             {...rest}
@@ -38,28 +53,66 @@ export const ItemElement = memo(({ index, user, selected, renderFirstItem, hasAl
                 backgroundColor: selected ? Colors.grey300 : 'transparent',
             }}
         >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <ItemImage
                     item={user}
+                    isStatus={isStatus}
                     selected={selected}
                     hasAlreadyBeenSeen={hasAlreadyBeenSeen}
                 />
 
                 <View style={{ marginLeft: 15 }}>
-                    <Text style={{ fontWeight: '500', fontSize: 18, color: Colors.black }}>
+                    <Text style={{ fontWeight: '700', fontSize: 18, color: Colors.grey700 }}>
                         {user.name}
                     </Text>
-                    <Text>
-                        {user.title}
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                        {isDiscussion && <>
+                            <IconI
+                                size={23}
+                                color={Colors.blue600}
+                                name="md-checkmark-done-sharp"
+                            />
+                            {user.id % 5 === 0 && <>
+                                <IconM
+                                    size={20}
+                                    name="microphone"
+                                    color={Colors.blue600}
+                                />
+                                <Text style={{ color: Colors.grey500, fontSize: 15, }}>
+                                    00:04
+                                </Text>
+                            </>}
+                        </>}
+                        
+                        {user.id % 5 !== 0 && <>
+                            <Text style={{ color: Colors.grey500, fontSize: 15, }}>
+                                {user.title}
+                            </Text>
+                        </>}
+                    </View>
                 </View>
             </View>
 
-            <View>
-                <Text style={{ fontWeight: '400', fontSize: 12 }}>
-                    02:43
+            {isOurStatus && <View>
+                <IconM
+                    size={20}
+                    color={Colors.green700}
+                    name="dots-horizontal"
+                />
+            </View>}
+
+            {isTime && <View>
+                <Text style={{ color: Colors.grey500, fontWeight: '400', fontSize: 12 }}>
+                    {user.createdAt.slice(0, -3)}
                 </Text>
-            </View>
+                {user.id % 6 === 0 && (
+                    <IconI
+                        size={20}
+                        name="volume-mute"
+                        color={Colors.grey500}
+                    />
+                )}
+            </View>}
         </TouchableOpacity>
 
         {isRecentUpdate && (
@@ -89,12 +142,12 @@ export const LabelStatus = memo(({ label }) => (
     </View>
 ))
 
-export const ItemImage = memo(({ item, selected, hasAlreadyBeenSeen }) => {
+export const ItemImage = memo(({ item, selected, isStatus, hasAlreadyBeenSeen }) => {
     return (
         <View
         >
             <View
-                style={{
+                style={ isStatus && {
                     padding: 2,
                     borderWidth: 2,
                     borderRadius: 100,
@@ -107,7 +160,7 @@ export const ItemImage = memo(({ item, selected, hasAlreadyBeenSeen }) => {
                 />
             </View>
             {selected && (
-                <Icon
+                <IconS
                     size={20}
                     name="check"
                     color={Colors.white}

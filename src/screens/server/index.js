@@ -21,6 +21,14 @@ export function makeServer({ environment = "development" } = {}) {
         title () {
           return faker.name.title();
         },
+        createdAt () {
+          return faker.date.future().toLocaleTimeString(
+            'fr-FR', {
+              hour: '2-digit',
+              minute: '2-digit'
+            }
+          );
+        }
       }),
     },
 

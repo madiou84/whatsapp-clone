@@ -3,7 +3,6 @@ import { Colors, FAB, Text } from 'react-native-paper';
 
 import { makeServer } from "../server";
 import { List, Item, ItemElement } from '../../shared/list';
-import { View } from 'react-native';
 
 if (process.env.NODE_ENV === "development") {
   if (window.server) {
@@ -13,17 +12,14 @@ if (process.env.NODE_ENV === "development") {
 }
 
 export default function StatusScreen ({ navigation }) {
-  let [users, setUsers] = useState([]);
-  let [serverError, setServerError] = useState();
-  const [hasSelected, setHasSelected] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [serverError, setServerError] = useState();
   
   useEffect(() => {
-    setHasSelected([]);
-
-    let fetchUsers = async () => {
+    const fetchUsers = async () => {
       try {
-        let res = await fetch("/api/users");
-        let data = await res.json();
+        const res = await fetch("/api/users");
+        const data = await res.json();
         data.error ? setServerError(data.error) : setUsers(data.users)
       } catch (error) {
         setServerError(error.message);
@@ -31,11 +27,7 @@ export default function StatusScreen ({ navigation }) {
     };
 
     fetchUsers();
-
-    return () => {
-      setHasSelected([]);
-    };
-  }, [ setUsers, setHasSelected ]);
+  }, [ setUsers ]);
 
   return (
     <>
@@ -51,16 +43,18 @@ export default function StatusScreen ({ navigation }) {
         ) : (
           users.map((user, key) => (
             <Item
+              isStatus
               user={user}
               index={key}
               key={user.id}
               isUpdateView={user.id === "5"}
-              isRecentUpdate={user.id === "2"}
-              hasAlreadyBeenSeen={user.id === "3" || user.id === "4" || user.id === "5"}
+              hasAlreadyBeenSeen={user.id === "2" || user.id === "3" || user.id === "4" || user.id === "5"}
               renderFirstItem={({ index, selected, renderFirstItem, hasAlreadyBeenSeen }) => (
                 <ItemElement
                   user={user}
+                  isOurStatus
                   index={index}
+                  isRecentUpdate
                   selected={selected}
                   renderFirstItem={renderFirstItem}
                   hasAlreadyBeenSeen={hasAlreadyBeenSeen}

@@ -1,6 +1,5 @@
 import React from 'react';
-import IconMI from 'react-native-vector-icons/MaterialIcons';
-import IconMC from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Colors } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -9,17 +8,19 @@ import {
     Photo,
     Status,
     Discussion,
+    CallDetail,
+    StatusDetail,
+    DiscussionDetail,
 } from '../screens';
-import { View } from 'react-native';
-import { Colors, Text } from 'react-native-paper';
+import WhatsAppHeader from '../shared/WhatsAppHeader';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
 
-function TabApp () {
+function TopTabsNavigator () {
   return (
     <Tab.Navigator
-        initialRouteName="Discussion"
+        initialRouteName="Disc."
         screenOptions={{
             tabBarStyle: {
                 backgroundColor: 'rgb(7, 94, 84)',
@@ -34,47 +35,45 @@ function TabApp () {
         }}
     >
         <Tab.Screen name="Photo" component={Photo} />
-        <Tab.Screen name="Discussion" component={Discussion} />
+        <Tab.Screen name="Disc." component={Discussion} />
         <Tab.Screen name="Status" component={Status} />
         <Tab.Screen name="Call" component={Call} />
     </Tab.Navigator>
   );
 }
 
+function DiscussionStack () {
+    return (
+        <Stack.Navigator
+            initialRouteName="Discussion"
+        >
+            <Tab.Screen
+                name="Discussion"
+                component={TopTabsNavigator}
+                options={{
+                    header: props => (
+                        <WhatsAppHeader {...props} />
+                    )
+                }}
+            />
+            <Tab.Screen name="CallDetail" component={CallDetail} options={{ headerShown: true }} />
+            <Tab.Screen name="StatusDetail" component={StatusDetail} options={{ headerShown: true }} />
+            <Tab.Screen name="DiscussionDetail" component={DiscussionDetail} options={{ headerShown: true }} />
+        </Stack.Navigator>
+    )
+}
+
 function App () {
     return (
-        <View style={{ flex: 1 }}>
-            <View style={{
-                height: 60,
-                paddingHorizontal: 15,
-                backgroundColor: 'rgb(7, 94, 84)',
-            }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, }}>
-                    <Text style={{ fontSize: 28, fontWeight: 'bold', color: 'white' }}>
-                        WhatsApp
-                    </Text>
-
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ paddingRight: 2, color: Colors.brown200 }}>
-                            <IconMI
-                                size={30}
-                                name="search"
-                                color={Colors.white}
-                            />
-                        </Text>
-                        <Text style={{ paddingLeft: 2, color: Colors.brown200 }}>
-                            <IconMC
-                                size={28}
-                                name="dots-vertical"
-                                color={Colors.white}
-                            />
-                        </Text>
-                    </View>
-                </View>
-            </View>
-
-            <TabApp/>
-        </View>
+        <Stack.Navigator>
+            <Stack.Screen
+                name="DiscussionStack"
+                component={DiscussionStack}
+                options={{
+                    headerShown: false
+                }}
+            />
+        </Stack.Navigator>
     )
 }
 

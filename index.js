@@ -1,9 +1,9 @@
 import 'react-native-gesture-handler';
 
 import React from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, SafeAreaView, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { DefaultTheme, Provider } from 'react-native-paper';
+import { Colors, DefaultTheme, Provider } from 'react-native-paper';
 
 import App from './src/routes';
 import { name as appName } from './app.json';
@@ -21,9 +21,17 @@ const theme = {
 export default function Main() {
   return (
     <NavigationContainer>
-      <Provider theme={theme}>
-        <App />
-      </Provider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Provider theme={theme}>
+          <StatusBar
+              animated
+              barStyle="light-content"
+              backgroundColor={Colors.teal900}
+          />
+
+          <App />
+        </Provider>
+      </SafeAreaView>
     </NavigationContainer>
   );
 }

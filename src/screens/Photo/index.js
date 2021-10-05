@@ -8,5 +8,3 @@ export default function PhotoScreen ({ navigation }) {
       </View>
     );
 }
-
-// PhotoScreen.setOptions()

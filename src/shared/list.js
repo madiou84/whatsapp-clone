@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { Text, Colors } from 'react-native-paper';
 import IconI from 'react-native-vector-icons/Ionicons';
+import IconMI from 'react-native-vector-icons/MaterialIcons';
 import IconS from 'react-native-vector-icons/SimpleLineIcons';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity, Image, View, ScrollView } from 'react-native';
@@ -30,12 +31,17 @@ export const Item = memo(props => {
 export const ItemElement = memo(({
     user,
     index,
+    isCall,
     isTime,
     selected,
     isStatus,
+    isEmitCall,
+    isMissCall,
+    isVideoCall,
     isOurStatus,
     isDiscussion,
     isUpdateView,
+    isReceiveCall,
     isRecentUpdate,
     renderFirstItem,
     hasAlreadyBeenSeen,
@@ -83,10 +89,22 @@ export const ItemElement = memo(({
                                 </Text>
                             </>}
                         </>}
+                        {isCall && <>
+                            {isMissCall && <IconM
+                                size={23}
+                                color={Colors.red600}
+                                name="arrow-bottom-left"
+                            />}
+                            {(isReceiveCall || isEmitCall) && <IconM
+                                size={23}
+                                name="arrow-top-right"
+                                color={Colors.green600}
+                            />}
+                        </>}
                         
                         {user.id % 5 !== 0 && <>
                             <Text style={{ color: Colors.grey500, fontSize: 15, }}>
-                                {user.title}
+                                {user.id % 4 === 0 ? `(2) ` : ''} {user.title}
                             </Text>
                         </>}
                     </View>
@@ -100,6 +118,14 @@ export const ItemElement = memo(({
                     name="dots-horizontal"
                 />
             </View>}
+
+            {isCall && <>
+                <IconMI
+                    size={20}
+                    color={Colors.green700}
+                    name={isVideoCall ? 'videocam' : 'call'}
+                />
+            </>}
 
             {isTime && <View>
                 <Text style={{ color: Colors.grey500, fontWeight: '400', fontSize: 12 }}>

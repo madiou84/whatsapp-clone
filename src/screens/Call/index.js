@@ -43,9 +43,14 @@ export default function CallScreen ({ navigation }) {
         ) : (
           users.map((user, key) => (
             <Item
+              isCall
               index={key}
               user={user}
               key={user.id}
+              isMissCall={user.id % 2 === 0}
+              isEmitCall={user.id % 2 !== 0}
+              isVideoCall={user.id % 8 === 0}
+              isReceiveCall={user.id % 3 === 0 && user.id % 11 === 0}
             />
           )
         ))}
@@ -53,9 +58,8 @@ export default function CallScreen ({ navigation }) {
       
       <FAB
         small
-        animated
-        icon="pencil"
-        color={Colors.blueGrey400}
+        icon="video-plus"
+        color={Colors.lightGreen900}
         onPress={() => console.log('Pressed')}
         style={{
           right: 23,
@@ -66,8 +70,7 @@ export default function CallScreen ({ navigation }) {
       />
 
       <FAB
-        animated
-        icon="camera"
+        icon="plus"
         color={Colors.white}
         onPress={() => console.log('Pressed')}
         style={{

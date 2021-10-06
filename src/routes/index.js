@@ -1,5 +1,9 @@
 import React from 'react';
-import { Colors } from 'react-native-paper';
+import { Image, View } from 'react-native';
+import { Colors, Text } from 'react-native-paper';
+import IconE from 'react-native-vector-icons/Entypo';
+import IconI from 'react-native-vector-icons/Ionicons';
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -42,6 +46,30 @@ function TopTabsNavigator () {
   );
 }
 
+function LogoTitle ({ route, navigation }) {
+    const { user } = route.params;
+    console.log(user);
+
+    return (
+        <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: 40, height: 40, borderRadius: 100 }}>
+                <Image
+                    source={{ uri: user.avatarUrl }}
+                    style={{ width: 40, height: 40, borderRadius: 100 }}
+                />
+            </View>
+            <View style={{ marginLeft: 15 }}>
+                <Text style={{ color: Colors.white, fontWeight: 'bold', fontSize: 20 }}>
+                    {user.name}
+                </Text>
+                <Text style={{ color: Colors.white, fontWeight: '500', fontSize: 15 }}>
+                    Vue aujourd'hui à 22:04
+                </Text>
+            </View>
+        </View>
+    );
+}
+
 function DiscussionStack () {
     return (
         <Stack.Navigator
@@ -58,7 +86,38 @@ function DiscussionStack () {
             />
             <Tab.Screen name="CallDetail" component={CallDetail} options={{ headerShown: true }} />
             <Tab.Screen name="StatusDetail" component={StatusDetail} options={{ headerShown: true }} />
-            <Tab.Screen name="DiscussionDetail" component={DiscussionDetail} options={{ headerShown: true }} />
+            <Tab.Screen
+                name="DiscussionDetail"
+                component={DiscussionDetail}
+                options={(props) => ({
+                    headerTintColor: '#fff',
+                    headerTitle: selfProps => <LogoTitle {...selfProps} {...props} />,
+                    headerRight: (props) => (
+                        <View style={{ flexDirection: 'row' }}>
+                            <IconFA5
+                                size={20}
+                                name="video"
+                                color={Colors.white}
+                            />
+                            <IconI
+                                size={20}
+                                name="call"
+                                color={Colors.white}
+                                style={{ paddingHorizontal: 10 }}
+                            />
+                            <IconE
+                                size={20}
+                                color={Colors.white}
+                                name="dots-three-vertical"
+                            />
+                        </View>
+                    ),
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: 'rgb(7, 94, 84)',
+                    },
+                })}
+            />
         </Stack.Navigator>
     )
 }

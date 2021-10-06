@@ -28,7 +28,8 @@ export function makeServer({ environment = "development" } = {}) {
               minute: '2-digit'
             }
           );
-        }
+        },
+        // message: faker.message
       }),
     },
 
